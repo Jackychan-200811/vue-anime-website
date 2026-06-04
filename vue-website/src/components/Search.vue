@@ -270,12 +270,11 @@ const onInput = () => {
   }, 300)
 }
 
-// 选中联想项
+// 选中联想项 → 直接跳转详情页
 const selectSuggestion = (item) => {
-  keyword.value = item.title
   showSuggest.value = false
   currentSuggestIndex.value = -1
-  performSearch()
+  router.push(`/detail/${item.type}/${item.id}`)
 }
 
 // 清除搜索
@@ -332,10 +331,7 @@ const handleClickOutside = (e) => {
 
 // 跳转详情页
 const goToDetail = (item) => {
-  router.push({
-    path: `/Detailed/${item.id}`,
-    query: { type: item.type }
-  })
+  router.push(`/detail/${item.type}/${item.id}`)
 }
 
 // ==================== 生命周期 ====================

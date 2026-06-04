@@ -62,10 +62,11 @@
   
   <script setup>
   import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { useRouter } from 'vue-router'
+  
   import axios from 'axios'
   
-  const router = useRouter()
+  
+
   
   // Props & Emits
   const props = defineProps({
@@ -74,7 +75,7 @@
       default: false
     }
   })
-  const emit = defineEmits(['expand', 'collapse'])
+  const emit = defineEmits(['expand', 'collapse', 'navigateToDetail'])
   
   // 状态
   const isSearchOpen = ref(false)      // 搜索框是否展开
@@ -189,11 +190,11 @@
   }
   
   const selectSuggestion = (item) => {
-    keyword.value = item.title
     currentSuggestIndex.value = -1
     showSuggest.value = false
-    // 选中联想后直接执行搜索并展开
-    performSearch()
+    // 点击联想项 → 通知父组件在灵动岛浮窗内展示详情
+    emit('navigateToDetail', item)
+    closeExpand()
   }
   
   const clearSearch = () => {
@@ -250,7 +251,8 @@
   }
   
   const goToDetail = (item) => {
-    router.push(`/detail/${item.type}/${item.id}`)
+    // 通知父组件在灵动岛浮窗内展示详情
+    emit('navigateToDetail', item)
     closeExpand()
   }
   

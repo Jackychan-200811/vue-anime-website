@@ -154,7 +154,22 @@
     isViewingDetail.value = true
   }
   
+  // 从外部（搜索等）直接跳转到指定动漫的详情视图
+  const showDetail = (type, id) => {
+    selectedAnimeType.value = type
+    selectedAnimeId.value = id
+    if (!isDragExpanded.value) {
+      expandDrag()
+    }
+    // expandDrag 会将 isViewingDetail 重置为 false，需要再次设为 true
+    isViewingDetail.value = true
+  }
+  
   const backToList = () => {
+    // 根据详情页的动漫类型，切换到对应的列表
+    if (selectedAnimeType.value !== props.animeType) {
+      emit('update:animeType', selectedAnimeType.value)
+    }
     isViewingDetail.value = false
   }
   
@@ -168,6 +183,7 @@
     expandDrag,
     collapseDrag,
     setAnime,
+    showDetail,
     isDragExpanded
   })
   

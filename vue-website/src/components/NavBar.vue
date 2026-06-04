@@ -23,6 +23,7 @@
           :disabled="isDragExpanded"
           @expand="onSearchExpand"
           @collapse="onSearchCollapse"
+          @navigateToDetail="onNavigateToDetail"
         />
 
         <!-- 拖拽详情组件（包含小白条）— 仅国漫/日漫首页 -->
@@ -41,12 +42,19 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watch, computed, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import SearchModule from './SearchModule.vue'
 import DragDetailModule from './DragDetailModule.vue'
 
 const route = useRoute()
+const router = useRouter()
+
+// 模块级变量：记录上次关闭浮窗时的列表类型，跨路由切换保持记忆
+let lastListType = 'riman'
+
+// 模块级变量：路由跳转后待展示的详情信息
+let pendingDetail = null
 
 const searchModuleRef = ref(null)
 const dragModuleRef = ref(null)
@@ -87,6 +95,10 @@ const onSearchCollapse = () => {
 }
 
 const onDragExpand = () => {
+  // 打开浮窗时默认显示上次记录的类型
+  if (lastListType !== currentAnimeType.value) {
+    currentAnimeType.value = lastListType
+  }
   isDragExpanded.value = true
   // 如果搜索结果已展开，强制关闭
   if (searchModuleRef.value?.isSearchActive()) {
@@ -95,7 +107,30 @@ const onDragExpand = () => {
 }
 
 const onDragCollapse = () => {
+  // 记录关闭时最后显示的列表类型，下次打开默认显示该类型
+  lastListType = currentAnimeType.value
   isDragExpanded.value = false
+}
+
+// 搜索组件导航到详情：关闭搜索面板，在浮窗内展示动漫详情
+const onNavigateToDetail = (item) => {
+  // 先关闭搜索面板
+  if (searchModuleRef.value?.isSearchActive()) {
+    searchModuleRef.value.closeSearch()
+  }
+  
+  // 如果当前在国漫/日漫首页，直接在 DragDetailModule 中显示详情
+  if (showDragModule.value && dragModuleRef.value) {
+    currentAnimeType.value = item.type
+    currentAnimeId.value = item.id
+    dragModuleRef.value.showDetail(item.type, item.id)
+  } else {
+    // 不在国漫/日漫首页时：先跳转到对应首页，携带待展示的详情信息
+    pendingDetail = item
+    lastListType = item.type
+    const targetPath = item.type === 'guoman' ? '/guoman-home' : '/riman-home'
+    router.push(targetPath)
+  }
 }
 
 watch(() => route.path, () => {
@@ -105,6 +140,17 @@ watch(() => route.path, () => {
   }
   if (isExpanded.value) {
     searchModuleRef.value?.closeSearch()
+  }
+  
+  // 路由跳转后，如果有待展示的详情信息，自动在浮窗内展开
+  if (pendingDetail && showDragModule.value) {
+    const item = pendingDetail
+    pendingDetail = null
+    currentAnimeType.value = item.type
+    currentAnimeId.value = item.id
+    nextTick(() => {
+      dragModuleRef.value?.showDetail(item.type, item.id)
+    })
   }
 }, { immediate: true })
 </script>
