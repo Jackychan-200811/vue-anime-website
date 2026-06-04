@@ -1,6 +1,5 @@
 // src/composables/usePageWheel.js
 import { useRouter } from 'vue-router'
-import { usePageTransition } from './usePageTransition'
 
 // 定义页面顺序（3个页面）
 const PAGE_ORDER = ['home', 'guoman-home', 'riman-home']
@@ -12,9 +11,11 @@ const ROUTE_PATH_MAP = {
   'riman-home': '/riman-home'
 }
 
+// 模块级动画锁，防止动画期间连续触发
+let isAnimating = false
+
 export function usePageWheel(currentRouteName) {
   const router = useRouter()
-  const { isAnimating } = usePageTransition()
   
   // 防抖标志
   let isProcessing = false
@@ -27,7 +28,7 @@ export function usePageWheel(currentRouteName) {
     if (e.target.closest('.dynamic-island')) return
 
     // 如果正在动画中，阻止所有滚轮操作
-    if (isAnimating.value) {
+    if (isAnimating) {
       e.preventDefault()
       return
     }
@@ -51,17 +52,18 @@ export function usePageWheel(currentRouteName) {
     
     if (targetPage) {
       isProcessing = true
+      isAnimating = true
       e.preventDefault()
       
       const targetPath = ROUTE_PATH_MAP[targetPage]
       
-      // 直接使用 router.push，动画由 usePageTransition 的 onEnter/onLeave 处理
       router.push(targetPath)
       
-      // 延迟解锁，避免连续触发
+      // 动画时长 + 缓冲后解锁
       setTimeout(() => {
         isProcessing = false
-      }, 500)
+        isAnimating = false
+      }, 700)
     }
   }
   
@@ -69,6 +71,6 @@ export function usePageWheel(currentRouteName) {
     handleWheel,
     currentIndex,
     totalPages: PAGE_ORDER.length,
-    isAnimating
+    isAnimating: () => isAnimating
   }
 }
