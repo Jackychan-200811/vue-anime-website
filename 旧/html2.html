@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索页面</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="all-in-one">
+    <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">动漫</div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="请在此处输入搜索内容" class="search-input" id="search-input">
+                <button class="search-btn" id="search-btn">搜索</button>
+            </div>
+            <div class="header-right">
+                <a href="#" class="header-link">登入/注册</a>
+                <a href="#" class="header-link">阅读记录</a>
+                <a href="html.html" class="header-link active">首页</a>
+            </div>
+        </header>
+
+        <!-- 分类标签栏 -->
+        <nav class="category-nav">
+            <ul class="category-list">
+                <li class="category-item active"><a href="html.html">综合</a></li>
+                <li class="category-item"><a href="#">小说</a></li>
+                <li class="category-item"><a href="#">漫画</a></li>
+                <li class="category-item"><a href="#">动漫</a></li>
+                <li class="category-item"><a href="#">资讯</a></li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区 -->
+        <div class="suggest" id="suggest">
+            <!-- 空白区域，用于展示搜索结果 -->
+        </div>
+
+    
+    <script src="搜索.js"></script>
+
+</body>
+</html>

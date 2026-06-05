@@ -1,0 +1,12 @@
+# MySQL 数据库数据文件
+mysql_data/
+
+# Node.js
+node_modules/
+
+# IDE
+.vscode/
+
+# 操作系统
+.DS_Store
+Thumbs.db
