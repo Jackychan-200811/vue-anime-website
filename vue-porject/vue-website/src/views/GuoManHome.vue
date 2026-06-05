@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
 }
 
 .hint {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: normal;
   margin-top: 5px;
   opacity: 0.7;
