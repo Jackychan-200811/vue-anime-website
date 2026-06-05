@@ -3,7 +3,7 @@
     <div class="bg-layer" :style="{ backgroundImage: 'url(' + bgImage + ')' }"></div>
     <div class="placeholder-content">
       <div class="center-text">
-        首页
+        零度漫游
         <div class="hint">▲ 向上滚动进入日漫 ▲<br>▼ 向下滚动进入国漫 ▼</div>
       </div>
     </div>

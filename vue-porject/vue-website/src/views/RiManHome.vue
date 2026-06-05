@@ -3,7 +3,7 @@
     <div class="bg-layer" :style="{ backgroundImage: 'url(' + bgImage + ')' }"></div>
     <div class="placeholder-content">
       <div class="center-text">
-        日漫
+        樱色异闻
         <div class="hint">▲ 向上滚动进入国漫 ▲<br>▼ 向下滚动返回首页 ▼<br>↓ 下拉顶部白条浏览动漫列表 ↓</div>
       </div>
     </div>

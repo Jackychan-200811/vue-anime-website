@@ -3,7 +3,7 @@
     <div class="bg-layer" :style="{ backgroundImage: 'url(' + bgImage + ')' }"></div>
     <div class="placeholder-content">
       <div class="center-text">
-        国漫
+        山河漫语
         <div class="hint">▲ 向上滚动进入首页 ▲<br>▼ 向下滚动进入日漫 ▼<br>↓ 下拉顶部白条浏览动漫列表 ↓</div>
       </div>
     </div>
