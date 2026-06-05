@@ -105,9 +105,11 @@ const guomanImagePath = findImagePath('guoman');
 
 app.use('/images/riman', express.static(rimanImagePath));
 app.use('/images/guoman', express.static(guomanImagePath));
+app.use('/images/back', express.static(path.join(__dirname, 'public', 'BACK')));
 
 console.log(`🖼️ 日漫图片服务: http://localhost:${PORT}/images/riman/文件名.jpg`);
 console.log(`🖼️ 国漫图片服务: http://localhost:${PORT}/images/guoman/文件名.jpg`);
+console.log(`🖼️ 背景图片服务: http://localhost:${PORT}/images/back/S1~5.jpg`);
 
 // ==================== 调试接口 ====================
 app.get('/api/check-images', (req, res) => {

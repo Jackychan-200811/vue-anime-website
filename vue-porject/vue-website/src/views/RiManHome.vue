@@ -1,5 +1,6 @@
 <template>
   <div class="riman-home-page" ref="containerRef">
+    <div class="bg-layer" :style="{ backgroundImage: 'url(' + bgImage + ')' }"></div>
     <div class="placeholder-content">
       <div class="center-text">
         日漫
@@ -10,12 +11,16 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePageWheel } from '@/composables/usePageWheel'
+import { useRandomBg } from '@/composables/useRandomBg'
 
 const route = useRoute()
 const containerRef = ref(null)
+
+// 共享背景图片池，每次进入页面随机抽取且不会连续重复
+const bgImage = useRandomBg()
 
 const currentRouteName = route.name?.toLowerCase() || 'riman-home'
 const { handleWheel } = usePageWheel(currentRouteName)
@@ -33,11 +38,23 @@ onBeforeUnmount(() => {
 .riman-home-page {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #2d1b2e 0%, #5c3d5e 40%, #3d1e3a 100%);
-  position: relative;
+  background: linear-gradient(135deg, #e0d6e8 0%, #c8b8d8 40%, #d8cce0 100%);
+}
+
+.bg-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4; /* ★ 透明度在这里改：0=完全透明 1=完全不透明 */
+  z-index: 0;
+  pointer-events: none;
 }
 
 .placeholder-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
   min-height: 100vh;
   display: flex;
