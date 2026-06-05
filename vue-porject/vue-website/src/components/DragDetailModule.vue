@@ -174,7 +174,7 @@
   /* 小白条：始终在灵动岛外侧底部 */
   .drag-handle {
     position: absolute;
-    bottom: -18px;
+    bottom: -21px;
     left: 50%;
     transform: translateX(-50%);
     width: 200px;
@@ -190,7 +190,7 @@
   .drag-handle.is-dragging { cursor: grabbing }
   
   .drag-handle.is-expanded {
-    bottom: -20px;
+    bottom: -23px;
     opacity: 0.8;
   }
   
