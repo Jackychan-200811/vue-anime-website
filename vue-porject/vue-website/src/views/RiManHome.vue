@@ -65,15 +65,15 @@ onBeforeUnmount(() => {
 .center-text {
   text-align: center;
   color: white;
-  font-size: 48px;
+  font-size: 70px;
   font-weight: bold;
   text-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 .hint {
-  font-size: 16px;
+  font-size: 8px;
   font-weight: normal;
-  margin-top: 20px;
+  margin-top: 5px;
   opacity: 0.7;
   animation: bounce 1.5s infinite;
 }
