@@ -1,5 +1,6 @@
-# MySQL 数据库数据文件
+# 数据库数据文件
 mysql_data/
+dongman/
 
 # Node.js
 node_modules/
