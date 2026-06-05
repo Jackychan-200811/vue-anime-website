@@ -7,7 +7,7 @@
         
         <!-- logo 和导航链接 - 只在拖拽未展开且搜索结果未展开时显示 -->
         <div v-if="!isDragExpanded && !isExpanded" class="logo-zone">
-          <span class="logo-text">ANIME</span>
+          <span class="logo-text">アニメ</span>
         </div>
         
         <div v-if="!isDragExpanded && !isExpanded" class="nav-links-center">
