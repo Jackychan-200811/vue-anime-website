@@ -3,7 +3,7 @@
     <div class="placeholder-content">
       <div class="center-text">
         日漫
-        <div class="hint">▲ 向上滚动回国漫 ▼</div>
+        <div class="hint">▲ 向上滚动进入国漫 ▲<br>▼ 向下滚动返回首页 ▼<br>↓ 下拉顶部白条浏览动漫列表 ↓</div>
       </div>
     </div>
   </div>
@@ -33,11 +33,7 @@ onBeforeUnmount(() => {
 .riman-home-page {
   width: 100%;
   min-height: 100vh;
-  background-image: url('/2.webp');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
+  background: linear-gradient(135deg, #2d1b2e 0%, #5c3d5e 40%, #3d1e3a 100%);
   position: relative;
 }
 

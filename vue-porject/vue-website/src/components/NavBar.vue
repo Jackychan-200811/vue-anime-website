@@ -121,6 +121,7 @@ const onNavigateToDetail = (item) => {
   
   // 如果当前在国漫/日漫首页，直接在 DragDetailModule 中显示详情
   if (showDragModule.value && dragModuleRef.value) {
+    lastListType = item.type
     currentAnimeType.value = item.type
     currentAnimeId.value = item.id
     dragModuleRef.value.showDetail(item.type, item.id)
@@ -146,6 +147,7 @@ watch(() => route.path, () => {
   if (pendingDetail && showDragModule.value) {
     const item = pendingDetail
     pendingDetail = null
+    lastListType = item.type
     currentAnimeType.value = item.type
     currentAnimeId.value = item.id
     nextTick(() => {
@@ -158,16 +160,7 @@ watch(() => route.path, () => {
 <style scoped>
 /* ========== NavBar 专属样式 ========== */
 .fullscreen-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/2.webp');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  z-index: -1;
+  display: none;
 }
 
 .header-wrapper {

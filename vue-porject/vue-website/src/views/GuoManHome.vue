@@ -3,7 +3,7 @@
     <div class="placeholder-content">
       <div class="center-text">
         国漫
-        <div class="hint">▲ 向上滚动回首页 &nbsp;|&nbsp; ▼ 向下滚动进入日漫 ▼</div>
+        <div class="hint">▲ 向上滚动进入首页 ▲<br>▼ 向下滚动进入日漫 ▼<br>↓ 下拉顶部白条浏览动漫列表 ↓</div>
       </div>
     </div>
   </div>
@@ -33,9 +33,7 @@ onBeforeUnmount(() => {
 .guoman-home-page {
   width: 100%;
   min-height: 100vh;
-  background-image: url('/2.webp');
-  background-size: cover;
-  background-attachment: fixed;
+  background: linear-gradient(135deg, #3d0f12 0%, #7a1f24 40%, #4a1018 100%);
 }
 
 .placeholder-content {

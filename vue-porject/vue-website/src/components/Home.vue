@@ -3,7 +3,7 @@
     <div class="placeholder-content">
       <div class="center-text">
         首页
-        <div class="hint">▼ 向下滚动进入国漫 ▼</div>
+        <div class="hint">▲ 向上滚动进入日漫 ▲<br>▼ 向下滚动进入国漫 ▼</div>
       </div>
     </div>
   </div>
@@ -33,11 +33,7 @@ onBeforeUnmount(() => {
 .home-page {
   width: 100%;
   min-height: 100vh;
-  background-image: url('/2.webp');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
+  background: linear-gradient(135deg, #0c1929 0%, #1a3a5c 50%, #0d2137 100%);
 }
 
 .placeholder-content {

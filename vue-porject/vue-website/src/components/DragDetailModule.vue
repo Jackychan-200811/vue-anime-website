@@ -1,6 +1,6 @@
 <template>
     <div class="drag-detail-module">
-      <!-- 小白条 -->
+      <!-- 小白条：始终在灵动岛外侧底部，折叠时下拖展开，展开时上拖缩回 -->
       <div 
         class="drag-handle"
         :class="{ 'is-dragging': isDragging, 'is-expanded': isDragExpanded }"
@@ -12,7 +12,6 @@
   
       <!-- 拖拽展开后的内容区域 -->
       <div v-if="isDragExpanded" class="drag-expand-content">
-        <!-- 导航按钮组：列表视图=圆形关闭，详情视图=胶囊形[返回+关闭] -->
         <div class="drag-nav-controls" :class="{ 'is-detail': isViewingDetail }">
           <button v-if="isViewingDetail" class="nav-back-btn" @click="backToList">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
@@ -22,21 +21,12 @@
           </button>
         </div>
 
-        <!-- 列表层 -->
         <div v-show="!isViewingDetail" class="drag-content-layer">
-          <AnimeListContent 
-            :key="animeType"
-            :animeType="animeType"
-            @select="onSelectAnime"
-          />
+          <AnimeListContent :key="animeType" :animeType="animeType" @select="onSelectAnime" />
         </div>
 
-        <!-- 详情层 -->
         <div v-if="isViewingDetail" class="drag-content-layer">
-          <AnimeDetailContent 
-            :animeType="selectedAnimeType"
-            :animeId="selectedAnimeId"
-          />
+          <AnimeDetailContent :animeType="selectedAnimeType" :animeId="selectedAnimeId" />
         </div>
       </div>
     </div>
@@ -48,28 +38,17 @@
   import AnimeDetailContent from './AnimeDetailContent.vue'
   
   const props = defineProps({
-    animeType: {
-      type: String,
-      default: 'riman'
-    },
-    animeId: {
-      type: [Number, String],
-      default: 1
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+    animeType: { type: String, default: 'riman' },
+    animeId: { type: [Number, String], default: 1 },
+    disabled: { type: Boolean, default: false }
   })
   
   const emit = defineEmits(['expand', 'collapse', 'update:animeType', 'update:animeId'])
   
-  // 拖拽状态
   const isDragExpanded = ref(false)
   const isDragging = ref(false)
   const currentHeight = ref(54)
   
-  // 详情视图状态
   const isViewingDetail = ref(false)
   const selectedAnimeType = ref('riman')
   const selectedAnimeId = ref(1)
@@ -79,23 +58,26 @@
   const MIN_HEIGHT = 54
   const MAX_HEIGHT = window.innerHeight - 84
   
-  // ============ 拖拽逻辑 ============
+  const getNav = () => document.querySelector('.dynamic-island')
+  
+  // ============ 拖拽：折叠时下拖展开 / 展开时上拖缩回 ============
   const onDragStart = (e) => {
-    if (isDragExpanded.value || props.disabled) return
+    if (props.disabled) return
+    
     isDragging.value = true
     startY = e.clientY || (e.touches && e.touches[0].clientY)
-    startHeight = currentHeight.value
+    // 根据当前状态决定起始高度
+    startHeight = isDragExpanded.value ? MAX_HEIGHT : MIN_HEIGHT
     e.preventDefault()
     
-    const navbar = document.querySelector('.dynamic-island')
-    if (navbar) {
-      navbar.style.transition = 'none'
-    }
+    const nav = getNav()
+    if (nav) nav.style.transition = 'none'
   }
   
   const onDragMove = (e) => {
     if (!isDragging.value) return
     const currentY = e.clientY || (e.touches && e.touches[0].clientY)
+    // deltaY > 0 表示鼠标上移，< 0 表示下移
     const deltaY = startY - currentY
     let newHeight = startHeight - deltaY
     
@@ -104,10 +86,8 @@
     
     currentHeight.value = newHeight
     
-    const navbar = document.querySelector('.dynamic-island')
-    if (navbar) {
-      navbar.style.height = `${newHeight}px`
-    }
+    const nav = getNav()
+    if (nav) nav.style.height = `${newHeight}px`
     e.preventDefault()
   }
   
@@ -115,36 +95,33 @@
     if (!isDragging.value) return
     isDragging.value = false
     
-    const navbar = document.querySelector('.dynamic-island')
-    if (navbar) {
-      navbar.style.transition = ''
-      navbar.style.height = ''
-    }
+    const nav = getNav()
+    if (nav) { nav.style.transition = ''; nav.style.height = '' }
     
-    if (currentHeight.value > MIN_HEIGHT + 100) {
+    const threshold = MIN_HEIGHT + (MAX_HEIGHT - MIN_HEIGHT) / 2
+    
+    if (currentHeight.value > threshold) {
       expandDrag()
     } else {
       collapseDrag()
     }
+    
     currentHeight.value = MIN_HEIGHT
   }
   
   const expandDrag = () => {
     if (props.disabled) return
     isDragExpanded.value = true
-    isViewingDetail.value = false  // 每次展开都回到列表视图
+    isViewingDetail.value = false
     emit('expand')
   }
   
   const collapseDrag = () => {
     isDragExpanded.value = false
-    isViewingDetail.value = false  // 收起时重置视图
+    isViewingDetail.value = false
     emit('collapse')
-    
-    const navbar = document.querySelector('.dynamic-island')
-    if (navbar) {
-      navbar.style.height = ''
-    }
+    const nav = getNav()
+    if (nav) nav.style.height = ''
   }
   
   // ============ 列表↔详情切换 ============
@@ -154,50 +131,29 @@
     isViewingDetail.value = true
   }
   
-  // 从外部（搜索等）直接跳转到指定动漫的详情视图
   const showDetail = (type, id) => {
     selectedAnimeType.value = type
     selectedAnimeId.value = id
-    if (!isDragExpanded.value) {
-      expandDrag()
-    }
-    // expandDrag 会将 isViewingDetail 重置为 false，需要再次设为 true
+    if (!isDragExpanded.value) expandDrag()
     isViewingDetail.value = true
   }
   
   const backToList = () => {
-    // 根据详情页的动漫类型，切换到对应的列表
     if (selectedAnimeType.value !== props.animeType) {
       emit('update:animeType', selectedAnimeType.value)
     }
     isViewingDetail.value = false
   }
   
-  // ============ 暴露方法 ============
   const setAnime = (type, id) => {
     emit('update:animeType', type)
     emit('update:animeId', id)
   }
   
-  defineExpose({
-    expandDrag,
-    collapseDrag,
-    setAnime,
-    showDetail,
-    isDragExpanded
-  })
+  defineExpose({ expandDrag, collapseDrag, setAnime, showDetail, isDragExpanded })
   
-  // 监听 disabled，如果禁用则自动收起
-  watch(() => props.disabled, (val) => {
-    if (val && isDragExpanded.value) {
-      collapseDrag()
-    }
-  })
-  
-  // 监听路由变化，重新加载列表
-  watch(() => props.animeType, () => {
-    isViewingDetail.value = false  // 类型变化时回到列表
-  })
+  watch(() => props.disabled, (val) => { if (val && isDragExpanded.value) collapseDrag() })
+  watch(() => props.animeType, () => { isViewingDetail.value = false })
   
   onMounted(() => {
     window.addEventListener('mousemove', onDragMove)
@@ -215,14 +171,14 @@
   </script>
   
   <style scoped>
-  /* 小白条样式 */
+  /* 小白条：始终在灵动岛外侧底部 */
   .drag-handle {
     position: absolute;
-    bottom: -12px;
+    bottom: -18px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 16px;
+    width: 200px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -230,47 +186,36 @@
     z-index: 101;
     transition: opacity 0.2s;
   }
-  
-  .drag-handle:active {
-    cursor: grabbing;
-  }
-  
-  .drag-handle.is-dragging {
-    cursor: grabbing;
-  }
+  .drag-handle:active { cursor: grabbing }
+  .drag-handle.is-dragging { cursor: grabbing }
   
   .drag-handle.is-expanded {
-    bottom: -16px;
-    opacity: 0.5;
+    bottom: -20px;
+    opacity: 0.8;
   }
   
   .handle-bar {
-    width: 100px;
-    height: 5px;
+    width: 160px;
+    height: 6px;
     background: rgba(255,255,255,0.6);
     border-radius: 3px;
     backdrop-filter: blur(4px);
     transition: all 0.2s;
   }
-  
   .drag-handle.is-dragging .handle-bar {
     background: rgba(0,180,216,0.8);
-    width: 120px;
+    width: 200px;
   }
-  
   .drag-handle:hover .handle-bar {
     background: rgba(0,180,216,0.6);
-    width: 110px;
+    width: 180px;
   }
   
   .drag-expand-content {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     overflow: hidden;
-    padding: 44px 24px 48px;
+    padding: 44px 24px 24px;
     background: transparent;
   }
   
@@ -279,7 +224,6 @@
     height: 100%;
   }
   
-  /* 导航按钮组 */
   .drag-nav-controls {
     position: absolute; top: 10px; right: 12px; z-index: 200;
     display: flex; align-items: center;
@@ -306,35 +250,7 @@
     width: 32px; height: 32px;
     border-right: 1px solid rgba(255,255,255,.15);
   }
-  .nav-back-btn:hover { background: rgba(255,255,255,.15); }
-  .nav-close-btn { width: 32px; height: 32px; }
-  .nav-close-btn:hover { background: rgba(255,255,255,.15); }
-
-  
-  .drag-close-btn:hover {
-    background: rgba(0,0,0,0.4);
-    color: #fff;
-  }
-  
-  /* 返回列表按钮 */
-  .back-to-list-btn {
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    background: rgba(0,0,0,0.2);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    cursor: pointer;
-    font-size: 13px;
-    z-index: 200;
-    transition: all .2s;
-  }
-  
-  .back-to-list-btn:hover {
-    background: rgba(0,180,216,0.4);
-    border-color: rgba(0,180,216,0.4);
-  }
+  .nav-back-btn:hover { background: rgba(255,255,255,.15) }
+  .nav-close-btn { width: 32px; height: 32px }
+  .nav-close-btn:hover { background: rgba(255,255,255,.15) }
   </style>
