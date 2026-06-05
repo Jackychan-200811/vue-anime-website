@@ -257,7 +257,7 @@ watch(() => route.path, () => {
   color: #334155;
   text-decoration: none;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 17px;
   transition: all .25s;
   white-space: nowrap;
 }
