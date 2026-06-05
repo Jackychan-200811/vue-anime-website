@@ -20,8 +20,8 @@ const config = {
     queueLimit: 0
   },
   imagePaths: {
-    riman: 'C:\\Users\\123\\Desktop\\porject\\vue-porject\\anime-backend\\public\\RIMAN',
-    guoman: 'C:\\Users\\123\\Desktop\\porject\\vue-porject\\anime-backend\\public\\GUOMAN'
+    riman: 'C:\\Users\\zenobia0806\\Desktop\\毕设\\总工程文件\\vue-porject\\anime-backend\\public\\RIMAN',
+    guoman: 'C:\\Users\\zenobia0806\\Desktop\\毕设\\总工程文件\\vue-porject\\anime-backend\\public\\GUOMAN'
   },
   apiTypes: ['riman', 'guoman']
 };

@@ -95,10 +95,7 @@ const onSearchCollapse = () => {
 }
 
 const onDragExpand = () => {
-  // 打开浮窗时默认显示上次记录的类型
-  if (lastListType !== currentAnimeType.value) {
-    currentAnimeType.value = lastListType
-  }
+  // 直接使用当前路由对应的类型，不覆盖
   isDragExpanded.value = true
   // 如果搜索结果已展开，强制关闭
   if (searchModuleRef.value?.isSearchActive()) {
@@ -119,12 +116,16 @@ const onNavigateToDetail = (item) => {
     searchModuleRef.value.closeSearch()
   }
   
-  // 如果当前在国漫/日漫首页，直接在 DragDetailModule 中显示详情
-  if (showDragModule.value && dragModuleRef.value) {
+  // 如果当前在国漫/日漫首页，且搜索结果类型匹配，直接在浮窗内展示详情
+  const currentPageType = route.path === '/guoman-home' ? 'guoman' : route.path === '/riman-home' ? 'riman' : null
+  if (showDragModule.value && dragModuleRef.value && item.type === currentPageType) {
     lastListType = item.type
     currentAnimeType.value = item.type
     currentAnimeId.value = item.id
-    dragModuleRef.value.showDetail(item.type, item.id)
+    // 等搜索面板完全关闭后再展开拖拽，避免 disabled 拦截
+    nextTick(() => {
+      dragModuleRef.value?.showDetail(item.type, item.id)
+    })
   } else {
     // 不在国漫/日漫首页时：先跳转到对应首页，携带待展示的详情信息
     pendingDetail = item
