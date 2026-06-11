@@ -267,7 +267,7 @@ git status                     # 查看状态
 |--------|------|
 | [Jackychan-200811](https://github.com/Jackychan-200811) | 全栈开发 & 项目规划 |
 | [rin-7777777](https://github.com/rin-7777777) | 前端开发 & 数据清洗 |
-| [quzhiye90-prog](https://github.com/quzhiye90-prog) | 后端支持 & 数据库 |
+| [quzhiye90-prog](https://github.com/quzhiye90-prog) | 前端技术支持 |
 
 ---
 
