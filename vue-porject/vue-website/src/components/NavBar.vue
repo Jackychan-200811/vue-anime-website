@@ -10,10 +10,11 @@
           <span class="logo-text">アニメ</span>
         </div>
         
-        <div v-if="!isDragExpanded && !isExpanded" class="nav-links-center">
-          <router-link to="/" class="nav-item">首页</router-link>
-          <router-link to="/guoman-home" class="nav-item">国漫</router-link>
-          <router-link to="/riman-home" class="nav-item">日漫</router-link>
+        <div v-if="!isDragExpanded && !isExpanded" class="nav-links-center" ref="navContainerRef">
+          <div class="nav-indicator" :class="{ 'nav-indicator-ready': indicatorReady, 'nav-indicator-hover': hoverNavIndex !== -1 }" :style="indicatorStyle"></div>
+          <router-link to="/" class="nav-item" :class="{ 'nav-active': getActiveNavIndex() === 0 }" data-nav-index="0" @mouseenter="onNavHover(0)" @mouseleave="onNavLeave">首页</router-link>
+          <router-link to="/guoman-home" class="nav-item" :class="{ 'nav-active': getActiveNavIndex() === 1 }" data-nav-index="1" @mouseenter="onNavHover(1)" @mouseleave="onNavLeave">国漫</router-link>
+          <router-link to="/riman-home" class="nav-item" :class="{ 'nav-active': getActiveNavIndex() === 2 }" data-nav-index="2" @mouseenter="onNavHover(2)" @mouseleave="onNavLeave">日漫</router-link>
         </div>
 
         <!-- 搜索组件 - 始终显示（拖拽模式下也会显示，但会被拖拽内容覆盖） -->
@@ -42,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, nextTick } from 'vue'
+import { ref, watch, computed, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import SearchModule from './SearchModule.vue'
 import DragDetailModule from './DragDetailModule.vue'
@@ -65,6 +66,61 @@ const isSearchActive = ref(false)    // 搜索是否激活（用于禁用拖拽�
 
 const currentAnimeType = ref('riman')
 const currentAnimeId = ref(1)
+
+// ===== 导航指示器 =====
+const navContainerRef = ref(null)
+const indicatorStyle = ref({ left: '0px', width: '0px' })
+const indicatorReady = ref(false)
+const hoverNavIndex = ref(-1)  // -1 表示未悬停
+
+// 路由路径 → 导航项索引映射
+const routeNavIndexMap = {
+  '/': 0,
+  '/guoman-home': 1,
+  '/riman-home': 2
+}
+
+function getActiveNavIndex() {
+  return routeNavIndexMap[route.path] ?? 0
+}
+
+function updateIndicator() {
+  const container = navContainerRef.value
+  if (!container) return
+
+  const index = hoverNavIndex.value !== -1 ? hoverNavIndex.value : getActiveNavIndex()
+  const items = container.querySelectorAll('.nav-item')
+  const target = items[index]
+  if (!target) return
+
+  const containerRect = container.getBoundingClientRect()
+  const targetRect = target.getBoundingClientRect()
+
+  // 指示器比文字宽一些（左右各加 14px 内边距）
+  const paddingX = 14
+  const left = targetRect.left - containerRect.left - paddingX
+  const width = targetRect.width + paddingX * 2
+
+  indicatorStyle.value = {
+    left: `${left}px`,
+    width: `${width}px`
+  }
+
+  if (!indicatorReady.value) {
+    // 首次计算出结果后再显示，避免从左上角飞入
+    indicatorReady.value = true
+  }
+}
+
+function onNavHover(index) {
+  hoverNavIndex.value = index
+  updateIndicator()
+}
+
+function onNavLeave() {
+  hoverNavIndex.value = -1
+  updateIndicator()
+}
 
 // 小白条仅在国漫/日漫首页显示，主页隐藏
 const showDragModule = computed(() => {
@@ -137,6 +193,8 @@ const onNavigateToDetail = (item) => {
 
 watch(() => route.path, () => {
   updateAnimeByRoute()
+  // 更新导航指示器位置
+  nextTick(() => updateIndicator())
   if (isDragExpanded.value) {
     dragModuleRef.value?.collapseDrag()
   }
@@ -156,6 +214,11 @@ watch(() => route.path, () => {
     })
   }
 }, { immediate: true })
+
+// 初始化时计算指示器位置
+onMounted(() => {
+  nextTick(() => updateIndicator())
+})
 </script>
 
 <style scoped>
@@ -249,21 +312,49 @@ watch(() => route.path, () => {
   top: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  gap: clamp(14px, 2vw, 28px);
+  gap: clamp(18px, 2vw, 32px);
   z-index: 5;
 }
 
+.nav-indicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 38px;
+  border-radius: 19px;
+  background: rgba(0, 0, 0, 0.10);
+  z-index: -1;
+  opacity: 0;
+  transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, box-shadow 0.3s ease, opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.nav-indicator.nav-indicator-ready {
+  opacity: 1;
+}
+
 .nav-item {
+  position: relative;
   color: #334155;
   text-decoration: none;
   font-weight: 600;
-  font-size: 17px;
-  transition: all .25s;
+  font-size: 19px;
+  transition: color 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   white-space: nowrap;
 }
 
 .nav-item:hover {
   color: #00b4d8;
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.06);
+}
+
+.nav-item.nav-active {
+  color: #00b4d8;
+}
+
+.nav-indicator.nav-indicator-hover {
+  transform: translateY(calc(-50% - 2px)) scale(1.14);
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 </style>
