@@ -1,141 +1,284 @@
-# 🎬 Vue 动漫网站 (vue-anime-website)
+# 🎬 AnimePortal — 动漫门户网站
 
-> 一款基于 Vue.js 的动漫信息展示平台，聚焦国日漫资源，适配移动端全面屏（灵动岛 + 小白条），已对接后端数据服务。
+> 基于 Vue 3 + Express + MySQL 的全栈动漫信息展示平台，支持日漫与国漫浏览、搜索、详情查看。
+
+---
 
 ## 📌 项目状态
 
-![GitHub last commit](https://img.shields.io/badge/last%20commit-2026--06--06-brightgreen)
-![Vue](https://img.shields.io/badge/Vue-2.x%20%7C%203.x-4fc08d)
-![HTML](https://img.shields.io/badge/HTML-61.9%-orange)
-![Vue](https://img.shields.io/badge/Vue-26.0%-green)
-![JavaScript](https://img.shields.io/badge/JavaScript-9.1%-yellow)
+![Vue](https://img.shields.io/badge/Vue-3.5-4fc08d)
+![Vite](https://img.shields.io/badge/Vite-8.0-646cff)
+![Express](https://img.shields.io/badge/Express-5.2-000000)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)
+![Node](https://img.shields.io/badge/Node-24-339933)
 
-> 当前版本处于积极开发中，已完成前后端联调、高清图源替换及移动端 UI 适配。
- 
+> 已完成前后端联调、数据库迁移、Git SSH 配置，当前版本稳定运行。
+
+---
+
 ## ✨ 功能特性
 
-| 模块         | 功能说明                                                                       |
-| ------------ | -------------------------------------------------------------------------------|
-| 动漫浏览     | 首页卡片/列表展示，支持分类筛选（国漫、日漫等）                                  |
-| 国漫专题     | `国漫25` 目录下专门展示国产动漫内容（数据库内容为方便缩进与理解文件名后缀都为html |
-| 高清图库     | 已启用高清背景图与封面，提升视觉体验（`背景图预处理` 提交）                      |
-| 移动端优化   | 针对 iOS 灵动岛和底部小白条调整间距，避免遮挡内容                                |
-| 后端数据对接 | 通过 `后端连接目录适配` 完成 API 连接，支持动态数据拉取                          |
-| 多版本迭代   | 保留历史版本 (`旧`, `试`) 便于让使用者感受某些成员写的史                         |
+| 模块 | 说明 |
+|------|------|
+| **灵动岛导航** | 玻璃拟态（Glassmorphism）导航栏，椭圆形激活指示器平滑滑动，支持搜索展开与拖拽详情 |
+| **日漫/国漫浏览** | 卡片网格展示，分页加载，封面图片实时渲染 |
+| **实时搜索** | 300ms 防抖，并发搜索日漫+国漫，关键词高亮，键盘上下键选择联想 |
+| **动漫详情** | 封面、评分（五星渲染）、标签、简介、角色配音、STAFF、剧集列表、精选短评 |
+| **拖拽展开** | 国漫/日漫首页底部小白条可拖拽，展开列表浮窗，点击卡片查看详情 |
+| **页面切换动画** | 前进/后退不同方向滑动过渡，滚轮环形循环切换三页 |
+| **随机背景** | 24 张高清背景图池，每次进入页面随机抽取且不连续重复 |
+| **兜底设计** | API 不可用时自动使用本地默认数据，保证页面始终可渲染 |
+
+---
 
 ## 🧱 技术栈
 
-- **前端框架**：Vue (2.x / 3.x) – 实际版本请查看 `package.json`
-- **路由管理**：Vue Router (推测)
-- **状态管理**：Vuex 或 Pinia (如需要)
-- **HTTP 请求**：Axios (推测，用于对接后端)
-- **样式处理**：原生 CSS + 预处理器 (Less/Sass 视项目情况)
-- **构建工具**：Vue CLI 或 Vite (根据 `vue-porject` 目录判断)
-- **版本控制**：Git
+### 前端 (`vue-porject/vue-website`)
 
-## 📂 项目目录结构
-vue-anime-website/
-├── dongman/ # 动漫核心业务模块（组件、视图、路由）
-├── vue-porject/ # Vue 工程源码（入口、App、公共组件）
-├── 国漫25/ # 国漫专题数据、页面或静态资源（数据库内容）
-├── 数据/ # 本地 mock 数据或 JSON 配置
-├── 背景图预处理/ # 图片处理脚本 / 高清图替换工具
-├── 旧/ # 旧版本史山代码完整备份
-├── 试/ # 实验性功能或原型
-├── 参考资料/ # 设计稿、文档、第三方笔记
-├── 操作文档.docx # 详细的部署/运维手册（重要）
-├── 模板注释.html # 带注释的 HTML 模板示例
-├── .gitignore # Git 忽略规则
-├── package.json # 依赖与脚本（请核对）
-└── README.md # 项目说明（本文件）
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| Vue | 3.5 | 组件化框架（Composition API） |
+| Vue Router | 5.0 | 路由管理与过渡动画 |
+| Axios | 1.15 | HTTP 请求 |
+| Vite | 8.0 | 构建工具 |
+| CSS | Scoped | 组件级样式隔离 |
 
-text
+### 后端 (`vue-porject/anime-backend`)
 
-> 💡 提示：若 `vue-porject` 为实际前端根目录，请将上述路径中的根目录调整为 `vue-porject/`。
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| Express | 5.2 | HTTP 服务框架 |
+| mysql2 | 3.22 | MySQL 连接池 |
+| cors | 2.8 | 跨域支持 |
+
+### 数据库
+
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| MySQL | 8.0.45 | InnoDB 引擎 |
+| 数据库名 | anime_db | 2 张表，共 120 条数据 |
+
+---
+
+## 📂 项目结构
+
+```
+porject/
+├── vue-porject/                    # 主工程
+│   ├── anime-backend/              # 后端服务
+│   │   ├── server.js               # Express 主程序（API + 图片服务）
+│   │   ├── import-db.js            # 数据库导入脚本
+│   │   ├── package.json
+│   │   └── public/
+│   │       ├── RIMAN/              # 日漫封面图（70张）
+│   │       ├── GUOMAN/             # 国漫封面图（50张）
+│   │       └── BACK/               # 首页轮播图
+│   ├── vue-website/                # 前端应用
+│   │   ├── src/
+│   │   │   ├── components/         # 组件
+│   │   │   │   ├── NavBar.vue      # 灵动岛导航栏
+│   │   │   │   ├── Home.vue        # 首页
+│   │   │   │   ├── SearchModule.vue # 搜索模块
+│   │   │   │   ├── DragDetailModule.vue # 拖拽详情模块
+│   │   │   │   ├── AnimeListContent.vue # 动漫列表
+│   │   │   │   ├── AnimeDetailContent.vue # 动漫详情
+│   │   │   │   ├── RiManList.vue   # 日漫列表
+│   │   │   │   ├── GuoManList.vue  # 国漫列表
+│   │   │   │   └── detailed/Detailed.vue # 详情页（旧版）
+│   │   │   ├── views/
+│   │   │   │   ├── GuoManHome.vue  # 国漫首页「山河漫语」
+│   │   │   │   └── RiManHome.vue   # 日漫首页「樱色异闻」
+│   │   │   ├── composables/        # 组合式函数
+│   │   │   │   ├── usePageWheel.js # 滚轮页面切换
+│   │   │   │   ├── usePageTransition.js # 页面过渡动画
+│   │   │   │   ├── useDragExpand.js # 拖拽展开逻辑
+│   │   │   │   └── useRandomBg.js  # 随机背景图
+│   │   │   ├── router/index.js     # 路由配置
+│   │   │   ├── App.vue             # 根组件
+│   │   │   ├── main.js             # 入口
+│   │   │   └── style.css           # 全局样式
+│   │   ├── public/back/            # 背景图片（24张）
+│   │   ├── vite.config.js
+│   │   └── package.json
+│   ├── anime_db1.sql               # 数据库 SQL 导出文件
+│   └── FRONTEND_DOC.md             # 前端开发文档
+├── mysql_data/                     # MySQL 数据目录（Git 忽略）
+├── dongman/                        # SQLite 缓存（Git 忽略）
+├── 操作文档.docx                   # 运维操作手册
+├── PPT提示词.md                    # PPT 生成提示词
+└── README.md                       # 本文件
+```
+
+---
 
 ## 🚀 快速开始
 
 ### 1. 克隆仓库
+
 ```bash
-git clone https://github.com/Jackychan-200811/vue-anime-website.git
+git clone git@github.com:Jackychan-200811/vue-anime-website.git
 cd vue-anime-website
-2. 安装依赖
-如果项目根目录有 package.json，直接执行：
+```
 
-bash
-npm install
-# 或 yarn install
-若 package.json 位于 vue-porject 目录下，请先进入该目录。
+> ⚠️ 需使用 SSH 协议（HTTPS 被阻断），详见 [Git 配置说明](#git-配置)。
 
-3. 配置后端接口
-根据 .gitignore 和提交记录，可能存在环境变量文件（如 .env）。
+### 2. 启动 MySQL
 
-具体接口地址请参考 后端连接目录适配 相关代码或 操作文档.docx。
+确保 MySQL 8.0 已安装，数据目录指向 `mysql_data/`：
 
-4. 启动开发服务器
-bash
-npm run serve
-默认访问：http://localhost:8080
+```bash
+# 方式一：Windows 服务
+net start MySQL80
 
-5. 生产构建
-bash
-npm run build
-构建产物默认在 dist 目录。
+# 方式二：命令行指定数据目录
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" --datadir="C:\Users\123\Desktop\porject\mysql_data"
+```
 
-📡 后端对接说明
-项目已完成与后端的连接适配，支持动态拉取动漫列表、详情、图源等数据。
+首次使用需导入数据：
 
-若需更换 API 地址，请修改 axios 的基础 URL 配置（通常在 src/utils/request.js 或类似位置）。
+```bash
+cd vue-porject/anime-backend
+node import-db.js
+```
 
-本地模拟数据可放在 数据/ 目录下，用于离线开发。
+### 3. 启动后端
 
-🧪 测试与调试
-移动端调试：推荐使用 Chrome DevTools 的设备模拟模式，或真机调试（注意灵动岛和小白条效果）。
+```bash
+cd vue-porject/anime-backend
+npm install    # 首次
+npm start      # 启动在 http://localhost:3000
+```
 
-图源测试：切换不同清晰度图片，检查加载性能。
+### 4. 启动前端
 
-后端联调：确保后端服务已启动，并正确配置 CORS。
+```bash
+cd vue-porject/vue-website
+npm install    # 首次
+npm run dev    # 启动 Vite 开发服务器
+```
 
-📝 最近更新记录 (基于 Git Log)
-日期	更新内容
-2026-06-06	修改小白条与灵动岛的间距
-2026-06-06	更换高清图源（背景图预处理）
-2026-06-05	补全项目文件并更新后端文件
-2026-06-05	改进了后端连接目录适配
-👥 贡献者
-Jackychan-200811 (六花花の邪王真眼) - 项目创建者（全栈开发与企划策划）
+---
 
-rin-7777777 (澪) - 前端适配与 UI 调整 （数据清洗 前端开发与适配）
+## 📡 API 接口
 
-quzhiye90-prog (大西?小西!) - 后端连接与数据支持（xxjyu小组的技术支持）
+基地址：`http://localhost:3000`
 
+### 日漫 (`animes` 表，70条)
 
-🤝 贡献指南
-欢迎提交 Issue 或 Pull Request。请遵循以下规范：
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/animes` | 列表（支持 `?page=&limit=` 分页） |
+| GET | `/api/animes/:id` | 详情 |
+| GET | `/api/animes/search/:keyword` | 搜索 |
+| GET | `/api/animes/tag/:tag` | 按标签筛选 |
+| GET | `/api/animes/popular` | 热门排行（`?limit=N`） |
+| POST | `/api/animes` | 创建 |
+| PUT | `/api/animes/:id` | 更新 |
+| DELETE | `/api/animes/:id` | 删除 |
 
-新功能或修复请基于最新 main 分支创建新分支。
+### 国漫 (`animes_guoman` 表，50条)
 
-提交信息请使用 <type>(<scope>): <subject> 格式（如 fix(mobile): adjust island margin）。
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/guoman` | 列表 |
+| GET | `/api/guoman/:id` | 详情 |
+| GET | `/api/guoman/search/:keyword` | 搜索 |
+| POST | `/api/guoman` | 创建 |
+| PUT | `/api/guoman/:id` | 更新 |
+| DELETE | `/api/guoman/:id` | 删除 |
 
-确保代码符合 ESLint 配置（如有）。
+### 其他
 
-若涉及后端接口变更，请同步更新 操作文档.docx。
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/check-images` | 检查图片文件状态 |
+| GET | `/api/debug/routes` | 查看所有路由 |
+| GET | `/images/riman/:filename` | 日漫封面图 |
+| GET | `/images/guoman/:filename` | 国漫封面图 |
 
-⚠️ 注意事项
-本仓库暂未提供在线演示地址，请本地运行测试。
+---
 
-操作文档.docx 包含详细部署步骤和常见问题，务必查阅。
+## 🗄️ 数据库
 
-移动端适配中，灵动岛和小白条的间距值预设为 constant(safe-area-inset-top) 和 env(safe-area-inset-bottom)，若需微调请修改全局 CSS 变量。
+### 连接信息
 
-高清图源可能存在版权问题，仅用于个人学习或演示，请勿商用。
+| 参数 | 值 |
+|------|-----|
+| 主机 | localhost |
+| 端口 | 3306 |
+| 用户 | root |
+| 密码 | 123456 |
+| 数据库 | anime_db |
+| 数据目录 | `C:\Users\123\Desktop\porject\mysql_data` |
 
-📄 开源协议
-本项目暂未明确开源协议。如需使用或二次开发，请联系仓库所有者获取授权。
+### 验证数据库
 
-🔗 相关链接
-GitHub 仓库：https://github.com/Jackychan-200811/vue-anime-website
+```bash
+cd vue-porject/anime-backend
+node -e "const m=require('mysql2/promise');(async()=>{const c=await m.createConnection({host:'localhost',user:'root',password:'123456',port:3306});const[r]=await c.query('SELECT @@datadir AS d');console.log('数据目录:',r[0].d);await c.end()})()"
+```
 
-操作文档：./操作文档.docx
+---
 
-问题反馈：请在仓库 Issues 区提交
+## 🎨 亮点设计
+
+### 灵动岛导航 (NavBar)
+- 玻璃拟态半透明背景 + `backdrop-filter` 模糊
+- 椭圆形激活指示器：根据文字宽度动态计算，`0.28s` 弹性滑动
+- 悬停效果：文字变青蓝 `#00b4d8`，指示器放大 `1.14x` 并浮起（弹性曲线 `cubic-bezier(0.34, 1.56, 0.64, 1)`）
+- 搜索框点击展开，实时联想下拉
+
+### 页面切换
+- 滚轮上下滚动在「首页 → 国漫 → 日漫」三页间环形循环
+- 前进：新页从右滑入；后退：旧页向右滑出
+- 过渡动画 600ms，`cubic-bezier(0.25, 0.46, 0.45, 0.94)`
+
+### 五星评分渲染
+- 10 分制转 5 星制，支持半星
+- 动态生成 Font Awesome 星星 HTML
+
+---
+
+## 🔧 Git 配置
+
+本项目使用 SSH 协议连接 GitHub（因 HTTPS 443 端口被网络阻断）。
+
+```
+Host github.com
+    HostName ssh.github.com
+    Port 443
+    User git
+    IdentityFile ~/.ssh/id_ed25519_github
+```
+
+常用命令：
+
+```bash
+git pull --tags origin main    # 拉取最新
+git push origin main           # 推送
+git status                     # 查看状态
+```
+
+---
+
+## 👥 贡献者
+
+| GitHub | 角色 |
+|--------|------|
+| [Jackychan-200811](https://github.com/Jackychan-200811) | 全栈开发 & 项目规划 |
+| [rin-7777777](https://github.com/rin-7777777) | 前端开发 & 数据清洗 |
+| [quzhiye90-prog](https://github.com/quzhiye90-prog) | 后端支持 & 数据库 |
+
+---
+
+## 📄 开源协议
+
+本项目暂未明确开源协议。如需使用或二次开发，请联系仓库所有者。
+
+---
+
+## 🔗 相关链接
+
+- GitHub 仓库：https://github.com/Jackychan-200811/vue-anime-website
+- 操作文档：`./操作文档.docx`
+- PPT 提示词：`./PPT提示词.md`
