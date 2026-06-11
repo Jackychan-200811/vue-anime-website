@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>动漫详情页模板</title>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 外部样式表 -->
+    <link rel="stylesheet" href="模板.css">
+    <script type="text/javascript" src="评分星级功能.js"></script>
+</head>
+<body>
+
+<!-- ==================== 顶部导航栏 ==================== -->
+<div class="navbar">
+    <div class="nav-inner">
+        <div class="logo">
+            <i class="fas fa-tv"></i> AnimePortal
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">首页</a>
+            <a href="#">小说</a>
+            <a href="#">国漫</a>
+            <a href="#">日漫</a>
+        </div>
+        <div class="search-box">
+            <a href="html2.html">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索动漫、声优...">
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="detail-card">
+
+        <!-- 作品头部信息 -->
+        <div class="info-header">
+            <div class="cover">
+                <div class="cover-img" aria-label="封面"></div>
+            </div>
+            <div class="info-details">
+                <h1 class="anime-title">
+                    灼眼的夏娜 OVA 恋爱与温泉的校外学习！
+                    <div class="anime-title-jp">灼眼のシャナ</div>
+                    <div class="anime-title-en">Shakugan no Shana OVA: Koi to Onsen no Kougai Gakushuu!</div>
+                </h1>
+                <div class="tags">
+                    <span class="tag">OVA</span>
+                    <span class="tag">恋爱</span>
+                    <span class="tag">奇幻</span>
+                    <span class="tag">战斗</span>
+                    <span class="tag">校园</span>
+                </div>
+                <div class="score-area">
+                    <span class="score-number" id="animeScore">5.5</span>
+                    <span class="score-stars" id="starContainer"></span>
+                    <span class="score-people">739人评</span>
+                    <span style="margin-left: 8px; font-size: 0.8rem;"><a href=""><i class="far fa-comment-dots"></i> 我要点评</a></span>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-item"><i class="fas fa-play-circle"></i> <span class="stat-number">154.3万</span> 播放</div>
+                    <div class="stat-item"><i class="fas fa-users"></i> <span class="stat-number">171.3万</span> 系列追番</div>
+                    <div class="stat-item"><i class="fas fa-comment"></i> <span class="stat-number">3.6万</span> 弹幕</div>
+                </div>
+                <div class="info-meta">
+                    <span><i class="far fa-calendar-alt"></i> 2006年12月8日开播</span>
+                    <span><i class="fas fa-check-circle"></i> 已完结, 全1话</span>
+                    <span><i class="fas fa-language"></i> 日语</span>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary"><a href=""><i class="fas fa-play"></i> 播放全集</a></button>
+                    <button class="btn btn-outline"><i class="fas fa-plus-circle"></i> 追番</button>
+                    <button class="btn btn-outline"><i class="fas fa-share-alt"></i> 分享</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 简介区域 -->
+        <div class="section">
+            <div class="section-title">简介</div>
+            <div class="synopsis-text">
+                新学期刚开始，高中生·坂井悠二一如往常过着“日常生活”。然而有一天，他冷不防遭遇红世之王手下的侵袭。受到一名能够把人的存在化为灵火，并吸取灵火的神秘男子法利亚格尼的攻击。悠二的“日常”生活因此整个脱节，然而就在同一时间，一名少女出现在他面前。少女为了保护悠二不被法利亚格尼袭击，开始与悠二一同生活。悠二满怀感激向少女道谢，不料少女却如此低喃：“你已经不存在了。”我已经死了？存在丧失者·悠二为何还能够思考呢……
+            </div>
+        </div>
+
+        <!-- 角色配音区块 -->
+        <div class="section">
+            <div class="section-title">角色配音</div>
+            <div class="cast-grid">
+                <div class="cast-card">
+                    <div class="cast-avatar">夏</div>
+                    <div class="cast-info"><h4>夏娜</h4><p>釘宮理恵</p></div>
+                </div>
+                <div class="cast-card">
+                    <div class="cast-avatar">悠</div>
+                    <div class="cast-info"><h4>坂井悠二</h4><p>日野聡</p></div>
+                </div>
+                <div class="cast-card">
+                    <div class="cast-avatar">吉</div>
+                    <div class="cast-info"><h4>吉田一美</h4><p>川澄綾子</p></div>
+                </div>
+                <div class="cast-card">
+                    <div class="cast-avatar">佐</div>
+                    <div class="cast-info"><h4>佐藤启作</h4><p>野島健児</p></div>
+                </div>
+                <div class="cast-card">
+                    <div class="cast-avatar">田</div>
+                    <div class="cast-info"><h4>田中荣太</h4><p>近藤孝行</p></div>
+                </div>
+                <div class="cast-card">
+                    <div class="cast-avatar">绪</div>
+                    <div class="cast-info"><h4>绪方真竹</h4><p>小林由美子</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAFF 制作人员区块 -->
+        <div class="section">
+            <div class="section-title">STAFF</div>
+            <div class="staff-grid">
+                <div class="staff-item"><span class="staff-role">原作</span><span class="staff-name">高桥弥七郎、伊东杂音</span></div>
+                <div class="staff-item"><span class="staff-role">监督</span><span class="staff-name">渡部高志</span></div>
+                <div class="staff-item"><span class="staff-role">脚本</span><span class="staff-name">小林靖子</span></div>
+                <div class="staff-item"><span class="staff-role">人物原案</span><span class="staff-name">いとうのいぢ</span></div>
+                <div class="staff-item"><span class="staff-role">人物设定</span><span class="staff-name">大塚舞</span></div>
+                <div class="staff-item"><span class="staff-role">系列构成</span><span class="staff-name">白根秀树</span></div>
+                <div class="staff-item"><span class="staff-role">音乐</span><span class="staff-name">大谷幸</span></div>
+                <div class="staff-item"><span class="staff-role">音响监督</span><span class="staff-name">明田川仁</span></div>
+                <div class="staff-item"><span class="staff-role">动画制作</span><span class="staff-name">J.C.STAFF</span></div>
+            </div>
+        </div>
+
+        <!-- 剧集列表 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">剧集</div>
+                <a href="#" class="section-more-link">详情 →</a>
+            </div>
+            <div class="episode-list">
+                <div class="episode-card"><i class="fas fa-play-circle"></i> 第1话 · 恋爱与温泉的校外学习！</div>
+                <div class="episode-card"><i class="fas fa-film"></i> 特典映像</div>
+            </div>
+        </div>
+
+        <!-- 用户短评示例 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    精选短评 
+                    <span style="font-size: 0.8rem; margin-left: 12px; color: #00bcd4;">共192条短评</span>
+                </div>
+                <a href="#" class="section-more-link">更多 →</a>
+            </div>
+            <div class="reviews-preview">
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">夏</div>
+                        <span class="reviewer-name">灼眼のfan</span>
+                        <div class="review-score">
+                            <span class="review-score-number">9.5</span>
+                            <span class="review-score-stars"></span>
+                        </div>
+                    </div>
+                    <div class="review-content">钉宫理惠的夏娜太经典了！OVA糖分超高，温泉福利满分，老粉狂喜！</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">悠</div>
+                        <span class="reviewer-name">悠二保护协会</span>
+                        <div class="review-score">
+                            <span class="review-score-number">8.0</span>
+                            <span class="review-score-stars"></span>
+                        </div>
+                    </div>
+                    <div class="review-content">作为OVA剧情轻松有趣，人设不崩，而且弥补了TV里的甜蜜互动，推荐！</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">吉</div>
+                        <span class="reviewer-name">一美赛高</span>
+                        <div class="review-score">
+                            <span class="review-score-number">9.0</span>
+                            <span class="review-score-stars"></span>
+                        </div>
+                    </div>
+                    <div class="review-content">U2你选夏娜还是一美？作画质量很好，音乐依旧大谷幸神级发挥，JCstaff用心了。</div>
+                </div>
+            </div>
+        </div>
+
+
+
+    <!-- 底部信息 -->
+    <div class="footer">
+        <p>动漫门户网站 · 详情页模板 | 仅用于设计演示</p>
+        <p style="margin-top: 8px;">© AnimePortal 练习项目 | 建议使用宽屏浏览以获得最佳体验</p>
+    </div>
+</div>
+
+</body>
+</html>
